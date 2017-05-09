@@ -1,0 +1,11 @@
+{
+  "name": "react-controlled-focus-hoc",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "tslint": "^5.2.0",
+    "tslint-react": "^3.0.0",
+    "typescript": "^2.3.2"
+  }
+}
