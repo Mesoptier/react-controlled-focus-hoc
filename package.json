@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "lint": "tslint --project ./tsconfig.json --format stylish --type-check"
+  },
   "devDependencies": {
     "tslint": "^5.2.0",
     "tslint-react": "^3.0.0",
