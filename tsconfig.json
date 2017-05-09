@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
-    "jsx": "react"
+    "moduleResolution": "node",
+    "jsx": "react",
+    "noImplicitAny": true
   },
   "include": [
     "src/**/*"
