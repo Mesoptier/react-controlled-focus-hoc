@@ -1,10 +1,11 @@
 import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 
 type ReactComponent<P> = React.ComponentClass<P> | React.StatelessComponent<P>;
 
 interface ControlledFocusProps {
     focus: boolean;
-    changeFocus: (focus: boolean) => void;
+    changeFocus?: (focus: boolean) => void;
 }
 
 export default function controlledFocus<P>(Component: ReactComponent<P>) {
@@ -13,15 +14,20 @@ export default function controlledFocus<P>(Component: ReactComponent<P>) {
         private node: any;
 
         public componentDidMount() {
+            this.node = ReactDOM.findDOMNode(this);
+            this.updateFocus();
+        }
+
+        public componentDidUpdate() {
             this.updateFocus();
         }
 
         public render() {
             const { focus, changeFocus, ref, onFocus, onBlur, ...otherProps } = this.props as any;
-            return <Component ref={this.setRef} onFocus={this.handleFocus} onBlur={this.handleBlur} {...otherProps} />;
+            return <Component onFocus={this.handleFocus} onBlur={this.handleBlur} {...otherProps} />;
         }
 
-        private updateFocus() {
+        private updateFocus = () => {
             if (this.props.focus) {
                 this.node.focus();
             } else {
@@ -29,16 +35,20 @@ export default function controlledFocus<P>(Component: ReactComponent<P>) {
             }
         }
 
-        private setRef(ref: any) {
-            this.node = ref;
+        private handleFocus = (e: React.FocusEvent<any>) => {
+            if (this.props.changeFocus) {
+                this.props.changeFocus(true);
+            }
+
+            this.updateFocus();
         }
 
-        private handleFocus(e: React.FocusEvent<any>) {
-            this.props.changeFocus(true);
-        }
+        private handleBlur = (e: React.FocusEvent<any>) => {
+            if (this.props.changeFocus) {
+                this.props.changeFocus(false);
+            }
 
-        private handleBlur(e: React.FocusEvent<any>) {
-            this.props.changeFocus(false);
+            this.updateFocus();
         }
 
     };
