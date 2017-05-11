@@ -15,12 +15,12 @@ const ControlledFocusInput = controlledFocus(Input);
 
 describe('controlledFocus()', () => {
 
-    it('focus on mount if focus=true', () => {
+    it('should focus on mount if focus=true', () => {
         const wrapper = mount(<ControlledFocusInput focus={true} />, { attachTo: container });
         assert.equal(ReactDOM.findDOMNode(wrapper.instance()), document.activeElement);
     });
 
-    it('no focus on mount if focus=false', () => {
+    it('should not focus on mount if focus=false', () => {
         const wrapper = mount(<ControlledFocusInput focus={false} />, { attachTo: container });
         assert.notEqual(ReactDOM.findDOMNode(wrapper.instance()), document.activeElement);
     });
