@@ -1,10 +1,15 @@
-import { assert } from 'chai';
+import * as chai from 'chai';
+import * as sinon from 'sinon';
+import * as sinonChai from 'sinon-chai';
 
 import { mount } from 'enzyme';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
 import controlledFocus from '../src';
+
+const { expect } = chai;
+chai.use(sinonChai);
 
 const container = document.createElement('div');
 document.body.appendChild(container);
@@ -17,12 +22,38 @@ describe('controlledFocus()', () => {
 
     it('should focus on mount if focus=true', () => {
         const wrapper = mount(<ControlledFocusInput focus={true} />, { attachTo: container });
-        assert.equal(ReactDOM.findDOMNode(wrapper.instance()), document.activeElement);
+        expect(ReactDOM.findDOMNode(wrapper.instance())).to.equal(document.activeElement);
+        wrapper.detach();
     });
 
     it('should not focus on mount if focus=false', () => {
         const wrapper = mount(<ControlledFocusInput focus={false} />, { attachTo: container });
-        assert.notEqual(ReactDOM.findDOMNode(wrapper.instance()), document.activeElement);
+        expect(ReactDOM.findDOMNode(wrapper.instance())).to.not.equal(document.activeElement);
+        wrapper.detach();
+    });
+
+    it('should call changeFocus with true when input is focused', async () => {
+        const spy = sinon.spy();
+
+        const wrapper = mount(<ControlledFocusInput changeFocus={spy} />, { attachTo: container });
+        wrapper.simulate('focus');
+
+        expect(spy).to.be.calledOnce;
+        expect(spy).to.be.calledWith(true);
+        wrapper.detach();
+    });
+
+    it('should call changeFocus with false when input is blurred', async () => {
+        const spy = sinon.spy();
+
+        const wrapper = mount(<ControlledFocusInput changeFocus={spy} />, { attachTo: container });
+        wrapper.simulate('focus');
+        spy.reset();
+        wrapper.simulate('blur');
+
+        expect(spy).to.be.calledOnce;
+        expect(spy).to.be.calledWith(false);
+        wrapper.detach();
     });
 
 });

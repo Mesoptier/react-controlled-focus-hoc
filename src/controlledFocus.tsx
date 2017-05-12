@@ -4,7 +4,7 @@ import * as ReactDOM from 'react-dom';
 type ReactComponent<P> = React.ComponentClass<P> | React.StatelessComponent<P>;
 
 interface ControlledFocusProps {
-    focus: boolean;
+    focus?: boolean;
     changeFocus?: (focus: boolean) => void;
 }
 
@@ -28,6 +28,10 @@ export default function controlledFocus<P>(Component: ReactComponent<P>) {
         }
 
         private updateFocus = () => {
+            if (this.props.focus === undefined) {
+                return;
+            }
+
             if (this.props.focus) {
                 this.node.focus();
             } else {
@@ -36,7 +40,7 @@ export default function controlledFocus<P>(Component: ReactComponent<P>) {
         }
 
         private handleFocus = (e: React.FocusEvent<any>) => {
-            if (this.props.changeFocus) {
+            if (this.props.changeFocus !== undefined) {
                 this.props.changeFocus(true);
             }
 
@@ -44,7 +48,7 @@ export default function controlledFocus<P>(Component: ReactComponent<P>) {
         }
 
         private handleBlur = (e: React.FocusEvent<any>) => {
-            if (this.props.changeFocus) {
+            if (this.props.changeFocus !== undefined) {
                 this.props.changeFocus(false);
             }
 
